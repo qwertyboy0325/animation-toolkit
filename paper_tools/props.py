@@ -33,13 +33,13 @@ class TitleSafeAreaProps(OptionalProps,bpy.types.PropertyGroup):
     right : bpy.props.IntProperty(name="Right",min=0,subtype='PIXEL')
 
 class OverflowAreaProps(OptionalProps,bpy.types.PropertyGroup):
-    width : bpy.props.FloatProperty(name="Width",min=1,default=1.1,update=multiple_to_px)
-    height : bpy.props.FloatProperty(name="Height",min=1,default=1.1,update=multiple_to_px)
+    width : bpy.props.FloatProperty(name="Width",min=1,default=1.,update=multiple_to_px)
+    height : bpy.props.FloatProperty(name="Height",min=1,default=1.,update=multiple_to_px)
     px_width: bpy.props.IntProperty(name="Offset X",min=0,default=2112,subtype='PIXEL')
     px_height: bpy.props.IntProperty(name="Offset Y",min=0,default=1188,subtype='PIXEL')
 
-    pixel_offset_x: bpy.props.FloatProperty(name="pixel_offset_x")
-    pixel_offset_y: bpy.props.FloatProperty(name="pixel_offset_y")
+    # pixel_offset_x: bpy.props.FloatProperty(name="pixel_offset_x")
+    # pixel_offset_y: bpy.props.FloatProperty(name="pixel_offset_y")
 
 class BlankSpaceProps(bpy.types.PropertyGroup):
     top : bpy.props.IntProperty(name="Top",min=0,subtype='PIXEL',default=54)

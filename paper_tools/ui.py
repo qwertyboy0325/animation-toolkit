@@ -1,26 +1,14 @@
 import bpy
 
-class AniTools_PT:
+class ANITOOLS_PT:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_category = '2D Animation Toolkit'
     # bl_options = {'DEFAULT_CLOSED'}
 
-
-class AniTools_PT_main_panel(AniTools_PT,bpy.types.Panel):
-    bl_idname = "AniTools_PT_main_panel"
-    bl_label = "2D Animation Toolkit"
-    bl_options = {'DEFAULT_CLOSED'}
-
-    def draw(self,context):
-        layout= self.layout
-        layout.label(text="TODO: add some caption")
-
-
-class AniTools_PT_paper_panel(AniTools_PT,bpy.types.Panel):
-    bl_idname = "AniTools_PT_paper_panel"
+class ANITOOLS_PT_paper_panel(ANITOOLS_PT,bpy.types.Panel):
+    bl_idname = "ANITOOLS_PT_paper_panel"
     bl_label = "Papper Setting"
-    bl_parent_id = "AniTools_PT_main_panel"
 
     def draw(self,context):
         layout = self.layout
@@ -28,10 +16,10 @@ class AniTools_PT_paper_panel(AniTools_PT,bpy.types.Panel):
         layout.operator("anitools.generate_paper", text='Generate')
 
 
-class AniTools_PT_paper_size(AniTools_PT,bpy.types.Panel):
-    bl_idname = "AniTools_PT_paper_size"
+class ANITOOLS_PT_paper_size(ANITOOLS_PT,bpy.types.Panel):
+    bl_idname = "ANITOOLS_PT_paper_size"
     bl_label = "Papper Size"
-    bl_parent_id = "AniTools_PT_paper_panel"
+    bl_parent_id = "ANITOOLS_PT_paper_panel"
 
     def draw(self, context):
         layout = self.layout
@@ -49,10 +37,10 @@ class AniTools_PT_paper_size(AniTools_PT,bpy.types.Panel):
         column.prop(paper_size , 'dpi')
 
 
-class AniTools_PT_title_safe_area(AniTools_PT,bpy.types.Panel):
-    bl_idname = "AniTools_PT_title_safe_area"
+class ANITOOLS_PT_title_safe_area(ANITOOLS_PT,bpy.types.Panel):
+    bl_idname = "ANITOOLS_PT_title_safe_area"
     bl_label = "Title Safe Area"
-    bl_parent_id = "AniTools_PT_paper_panel"
+    bl_parent_id = "ANITOOLS_PT_paper_panel"
 
     def draw_header(self, context):
         layout = self.layout
@@ -76,10 +64,10 @@ class AniTools_PT_title_safe_area(AniTools_PT,bpy.types.Panel):
         column.prop(title_safe, 'renderable')
 
 
-class AniTools_PT_overflow_area(AniTools_PT,bpy.types.Panel):
-    bl_idname = "AniTools_PT_overflow_area"
+class ANITOOLS_PT_overflow_area(ANITOOLS_PT,bpy.types.Panel):
+    bl_idname = "ANITOOLS_PT_overflow_area"
     bl_label = "Overflow Area"
-    bl_parent_id = "AniTools_PT_paper_panel"
+    bl_parent_id = "ANITOOLS_PT_paper_panel"
 
     def draw_header(self, context):
         layout = self.layout
@@ -98,15 +86,15 @@ class AniTools_PT_overflow_area(AniTools_PT,bpy.types.Panel):
 
         column.prop(overflow_area, 'width')
         column.prop(overflow_area, 'height')
-        column.prop(overflow_area, 'offset_x')
-        column.prop(overflow_area, 'offset_y')
+        # column.prop(overflow_area, 'offset_x')
+        # column.prop(overflow_area, 'offset_y')
         column.prop(overflow_area, 'renderable')
 
 
-class AniTools_PT_blank_space(AniTools_PT,bpy.types.Panel):
-    bl_idname = "AniTools_PT_blank_space"
+class ANITOOLS_PT_blank_space(ANITOOLS_PT,bpy.types.Panel):
+    bl_idname = "ANITOOLS_PT_blank_space"
     bl_label = "Blank Space"
-    bl_parent_id = "AniTools_PT_paper_panel"
+    bl_parent_id = "ANITOOLS_PT_paper_panel"
 
     def draw(self, context):
         layout = self.layout
@@ -129,10 +117,9 @@ class AniTools_PT_blank_space(AniTools_PT,bpy.types.Panel):
 #     bl_parent_id = "AniTools_PT_paper_panel"
 
 classes = (
-    AniTools_PT_main_panel,
-    AniTools_PT_paper_panel,
-    AniTools_PT_paper_size,
-    AniTools_PT_title_safe_area,
-    AniTools_PT_overflow_area,
-    AniTools_PT_blank_space,
+    ANITOOLS_PT_paper_panel,
+    ANITOOLS_PT_paper_size,
+    ANITOOLS_PT_title_safe_area,
+    ANITOOLS_PT_overflow_area,
+    ANITOOLS_PT_blank_space,
 )

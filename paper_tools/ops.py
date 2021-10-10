@@ -7,6 +7,9 @@ class PAPER_OT_generate_paper(bpy.types.Operator):
     bl_label = "Generate Paper"
     def execute(self,context):
         cam = context.scene.camera
+        # for test
+        bpy.context.scene.use_nodes = True
+        # end
         support.GeneratePaper(context)
         support.SetAniBackground(cam)
         return {'FINISHED'}
