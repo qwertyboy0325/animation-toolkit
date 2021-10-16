@@ -24,11 +24,10 @@ def register():
 
 def unregister():
     preference.preference_unregister()
-
     if preference.is_dependencies_installed:
         for cls in classes:
             bpy.utils.unregister_class(cls)
         del bpy.types.Scene.anitools
 
-if __name__ == "__main__":
+if __name__ == "__main__" :
     register()

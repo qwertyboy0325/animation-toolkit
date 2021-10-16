@@ -31,7 +31,6 @@ class ANITOOLS_PT_paper_size(ANITOOLS_PT,bpy.types.Panel):
 
         paper_size = paper_setting.paper_size
 
-        row.label(text = "Basic Size: ")
         column.prop(paper_size , 'x')
         column.prop(paper_size , 'y')
         column.prop(paper_size , 'dpi')
