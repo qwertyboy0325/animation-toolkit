@@ -135,8 +135,10 @@ def SetAniBackground(cam):
     cam.data.show_background_images = True
 
     for name in names:
-        if bpy.data.images.get(name) is not None:
-            img = bpy.data.images[name].reload()
+        # if bpy.data.images.get(name) is not None:
+        if name in bpy.data.images:
+            bpy.data.images[name].reload()
+            bpy.data.images[name].pack()
         else:
             img = bpy.data.images.load(path + "\\" + name)
             img.pack()

@@ -26,9 +26,6 @@ class OUTPUT_OT_output(bpy.types.Operator):
 
         scanner = compositor.nodes['AniTools Scanner'] if 'AniTools Scanner' in compositor.nodes else generateScanner(compositor)
         scanner.location = (0,0)
-        
-        for node in compositor.nodes:
-            print(node.name)
 
         link = compositor.links.new
 

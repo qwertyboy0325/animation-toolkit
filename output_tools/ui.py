@@ -2,6 +2,13 @@ import bpy
 from bpy.types import Panel,Operator
 
 
+def draw_threshold(layout,binirization,label,prop_name):
+        row = layout.row()
+        row.scale_x = 0.6
+        row.label(text = label)
+        row.scale_x = 0.4
+        row.prop(binirization,prop_name,text = "")
+
 class ANITOOLS_PT_output:
     bl_label = "Output Setting"
     bl_category = '2D Animation Toolkit'
@@ -9,18 +16,24 @@ class ANITOOLS_PT_output:
 
     def draw(self,context):
         layout = self.layout
-        row = layout.row(align=True)
+        column = layout.column()
+        column.label(text = "Render:")
+        row = column.row(align=True)
+
+        ############################################################################################## TODO: Overwrite it by custom operator
+        op = row.operator("anitools.output",text = "Image",icon = "RENDER_STILL")
+        # op.animation = False
+
+        # op = row.operator("render.render",text = "Image",icon = "RENDER_STILL")
+        # op.animation = False
+
+        # op = row.operator("render.render",text = "Animation",icon = "RENDER_ANIMATION")
+        # op.animation = True
+        ##############################################################################################
+
+        # operator()
         # row.lable(text="")
         
-
-class ANITOOLS_PT_output_3d(ANITOOLS_PT_output,Panel):
-    bl_idname = "ANITOOLS_PT_output_3d"
-    bl_space_type = "VIEW_3D"
-
-class ANITOOLS_PT_output_img(ANITOOLS_PT_output,Panel):
-    bl_idname = "ANITOOLS_PT_output_img"
-    bl_space_type = "IMAGE_EDITOR"
-
 class ANITOOLS_PT_file_setting:
     bl_label = "File Setting"
     bl_region_type = "UI"
@@ -86,6 +99,81 @@ class ANITOOLS_PT_scanner_setting:
 
     def draw(self,context):
         layout = self.layout
+        scanner_setting = context.scene.anitools.output_setting.scanner_setting
+
+        column = layout.column()
+        column.prop(scanner_setting,"render_paper")
+
+class ANITOOLS_PT_binirize_setting:
+    bl_label = "Binirization"
+    bl_region_type = "UI"
+    bl_options = {'DEFAULT_CLOSED'}
+
+    def draw_header(self, context):
+        layout = self.layout
+        binirization = context.scene.anitools.output_setting.scanner_setting.binirization
+        layout.prop(binirization,'enable',text="")
+
+    def draw(self, context):
+        layout = self.layout
+        binirization = context.scene.anitools.output_setting.scanner_setting.binirization
+
+        column = layout.column(align = True)
+
+        column.label(text = "Threshold:")
+
+        box = column.box()
+        draw_threshold(box,binirization,"Black:","black_threshold")
+        draw_threshold(box,binirization,"Red:","red_threshold")
+        draw_threshold(box,binirization,"Green:","green_threshold")
+        draw_threshold(box,binirization,"Blue:","blue_threshold")
+
+        # row = column.row()
+        # row.scale_x = 0.7
+        # row.label("Black:")
+        # row.scale_x = 0.3
+        # row.prop(binirization,"black_threshold",text = "")
+
+class ANITOOLS_PT_basic_setting:
+    bl_label = "Basic Setting"
+    bl_region_type = "UI"
+
+    def draw(self,context):
+        layout = self.layout
+
+        scene = context.scene
+
+        column = layout.column(align=False)
+        subrow = column.row()
+        subrow.scale_x = 0.5
+        subrow.label(text="Frame Start")
+        subrow.scale_x = 0.5
+        subrow.prop(scene, 'frame_start', text = "")
+
+        column.separator()
+
+        subrow = column.row()
+        subrow.scale_x = 0.5
+        subrow.label(text="Frame End")
+        subrow.scale_x = 0.5
+        subrow.prop(scene, 'frame_end', text = "")
+
+        column.separator()
+
+        subrow = column.row()
+        subrow.scale_x = 0.5
+        subrow.label(text="Step")
+        subrow.scale_x = 0.5
+        subrow.prop(scene, 'frame_step', text = "")
+
+class ANITOOLS_PT_output_3d(ANITOOLS_PT_output,Panel):
+    bl_idname = "ANITOOLS_PT_output_3d"
+    bl_space_type = "VIEW_3D"
+
+class ANITOOLS_PT_output_img(ANITOOLS_PT_output,Panel):
+    bl_idname = "ANITOOLS_PT_output_img"
+    bl_space_type = "IMAGE_EDITOR"
+
 
 class ANITOOLS_PT_scanner_setting_3d(ANITOOLS_PT_scanner_setting,Panel):
     bl_parent_id = "ANITOOLS_PT_output_3d"
@@ -103,12 +191,31 @@ class ANITOOLS_PT_file_setting_img(ANITOOLS_PT_file_setting,Panel):
     bl_parent_id = "ANITOOLS_PT_output_img"
     bl_space_type = "IMAGE_EDITOR"
 
+class ANITOOLS_PT_binirize_setting_3d(ANITOOLS_PT_binirize_setting,Panel):
+    bl_parent_id = "ANITOOLS_PT_scanner_setting_3d"
+    bl_space_type = "VIEW_3D"
+
+class ANITOOLS_PT_binirize_setting_img(ANITOOLS_PT_binirize_setting,Panel):
+    bl_parent_id = "ANITOOLS_PT_scanner_setting_img"
+    bl_space_type = "IMAGE_EDITOR"
+
+class ANITOOLS_PT_basic_setting_3d(ANITOOLS_PT_basic_setting,Panel):
+    bl_parent_id = "ANITOOLS_PT_output_3d"
+    bl_space_type = "VIEW_3D"
+
+class ANITOOLS_PT_basic_setting_img(ANITOOLS_PT_basic_setting,Panel):
+    bl_parent_id = "ANITOOLS_PT_output_img"
+    bl_space_type = "IMAGE_EDITOR"
 
 classes = (
     ANITOOLS_PT_output_3d,
     ANITOOLS_PT_output_img,
+    ANITOOLS_PT_basic_setting_3d,
+    ANITOOLS_PT_basic_setting_img,
     ANITOOLS_PT_file_setting_3d,
     ANITOOLS_PT_file_setting_img,
     ANITOOLS_PT_scanner_setting_3d,
-    ANITOOLS_PT_scanner_setting_img
+    ANITOOLS_PT_scanner_setting_img,
+    ANITOOLS_PT_binirize_setting_3d,
+    ANITOOLS_PT_binirize_setting_img,
 )
