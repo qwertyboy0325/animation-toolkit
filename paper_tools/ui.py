@@ -26,7 +26,6 @@ class ANITOOLS_PT_paper_size(ANITOOLS_PT,bpy.types.Panel):
         anitools = context.scene.anitools
         paper_setting = anitools.paper_setting
 
-        row = layout.row()
         column = layout.column()
 
         paper_size = paper_setting.paper_size
@@ -51,10 +50,12 @@ class ANITOOLS_PT_title_safe_area(ANITOOLS_PT,bpy.types.Panel):
         anitools = context.scene.anitools
         paper_setting = anitools.paper_setting
 
-        row = layout.row()
         column = layout.column()
 
         title_safe = paper_setting.title_safe
+
+        if title_safe.enable is False:
+            layout.enabled = False
 
         column.prop(title_safe, 'top')
         column.prop(title_safe, 'bottom')
@@ -78,15 +79,15 @@ class ANITOOLS_PT_overflow_area(ANITOOLS_PT,bpy.types.Panel):
         anitools = context.scene.anitools
         paper_setting = anitools.paper_setting
 
-        row = layout.row()
         column = layout.column()
-
+        
         overflow_area = paper_setting.overflow_area
+
+        if overflow_area.enable is False:
+            layout.enabled = False
 
         column.prop(overflow_area, 'width')
         column.prop(overflow_area, 'height')
-        # column.prop(overflow_area, 'offset_x')
-        # column.prop(overflow_area, 'offset_y')
         column.prop(overflow_area, 'renderable')
 
 

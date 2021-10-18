@@ -7,13 +7,14 @@ def paper_size_update(self, context):
     render = context.scene.render
     render.resolution_x = paper_size.x
     render.resolution_y = paper_size.y
+    return None
 
 def multiple_to_px(self,context):
     paper_size = context.scene.anitools.paper_setting.paper_size
     overflow_area = context.scene.anitools.paper_setting.overflow_area
     overflow_area.px_width = paper_size.x * overflow_area.width
     overflow_area.px_height = paper_size.y * overflow_area.height
-
+    return None
 
 class OptionalProps:
     enable : bpy.props.BoolProperty(name="Enable",default=True)
