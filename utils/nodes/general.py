@@ -17,6 +17,7 @@ class ColorBinarizationNode(AniNodeInterface):
 
         export_group.node_tree = bpy.data.node_groups['ColorBinarizationNodeTree']
         export_group.name = name
+        export_group.label = name
         return export_group
 
 class BlackBinarizationNode(AniNodeInterface):
@@ -28,6 +29,7 @@ class BlackBinarizationNode(AniNodeInterface):
 
         export_group.node_tree = bpy.data.node_groups['BlackBinarizationNodeTree']
         export_group.name = name
+        export_group.label = name
         return export_group
 
 class ColorFilterNode(AniNodeInterface):
@@ -39,6 +41,7 @@ class ColorFilterNode(AniNodeInterface):
 
         export_group.node_tree = bpy.data.node_groups['ColorFilterNodeTree']
         export_group.name = name
+        export_group.label = name
         return export_group
       
 class BlackFilterNode(AniNodeInterface):
@@ -50,6 +53,7 @@ class BlackFilterNode(AniNodeInterface):
 
         export_group.node_tree = bpy.data.node_groups['BlackFilterNodeTree']
         export_group.name = name
+        export_group.label = name
         return export_group
 
 class BinarizationNode(AniNodeInterface):
@@ -61,7 +65,11 @@ class BinarizationNode(AniNodeInterface):
 
         export_group.node_tree = bpy.data.node_groups['BinarizationNodeTree']
         export_group.name = name
+        export_group.label = name
         return export_group
+
+    def set():
+        return
 
 
 class PaperOutputNode(AniNodeInterface):
@@ -73,6 +81,7 @@ class PaperOutputNode(AniNodeInterface):
         
         export_group.node_tree = bpy.data.node_groups['PaperOutputNodeTree']
         export_group.name = name
+        export_group.label = name
         return export_group
 
 class AniScannerNode(AniNodeInterface):
@@ -83,5 +92,6 @@ class AniScannerNode(AniNodeInterface):
             generalTrees()
         export_group.node_tree = bpy.data.node_groups['AniScannerNodeTree']
         export_group.name = name
+        export_group.label = name
         return export_group
 

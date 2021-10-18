@@ -16,9 +16,23 @@ def multiple_to_px(self,context):
     overflow_area.px_height = paper_size.y * overflow_area.height
     return None
 
+def update_background_image(self,context):
+    set_background_image(context)
+
+    return None
+
+def set_background_image(context):
+    if len(context.scene.camera.data.background_images)>3:
+        b02_img = context.scene.camera.data.background_images[2]
+        b02_enable = context.scene.anitools.paper_setting.title_safe.enable
+        b02_img.alpha = 1 if b02_enable is True else 0
+        c03_img = context.scene.camera.data.background_images[0]
+        c03_enable = context.scene.anitools.paper_setting.overflow_area.enable
+        c03_img.alpha = 1 if c03_enable is True else 0
+
 class OptionalProps:
-    enable : bpy.props.BoolProperty(name="Enable",default=True)
-    renderable : bpy.props.BoolProperty(name="Renderable",default=True)
+    enable : bpy.props.BoolProperty(name="Enable",default=True,update=update_background_image)
+    renderable : bpy.props.BoolProperty(name="Renderable",default=True,update = update_background_image)
 
 class PaperSizeProps(bpy.types.PropertyGroup):
     x : bpy.props.IntProperty(name="Width",min=0,max=8192,soft_max=4096, subtype='PIXEL'

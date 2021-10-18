@@ -286,6 +286,16 @@ class BinarizationNodeTree:
         export_group_tree.inputs.new('NodeSocketFloatFactor','Green Threshold').default_value = 0.5
         export_group_tree.inputs.new('NodeSocketFloatFactor','Blue Threshold').default_value = 0.5
 
+        export_group_tree.inputs['Black Threshold'].min_value = 0
+        export_group_tree.inputs['Red Threshold'].min_value = 0
+        export_group_tree.inputs['Green Threshold'].min_value = 0
+        export_group_tree.inputs['Blue Threshold'].min_value = 0
+
+        export_group_tree.inputs['Black Threshold'].max_value = 1
+        export_group_tree.inputs['Red Threshold'].max_value = 1
+        export_group_tree.inputs['Green Threshold'].max_value = 1
+        export_group_tree.inputs['Blue Threshold'].max_value = 1
+
         group_out = export_group_tree.nodes.new('NodeGroupOutput')
         group_out.location = (800,0)
 
@@ -429,41 +439,49 @@ class PaperOutputNodeTree:
         export_group_tree.outputs.new('NodeSocketColor','Color')
 
         a01_img_node = export_group_tree.nodes.new('CompositorNodeImage')
+        a01_img_node.name = "A01"
         a01_img_node.location = (-400,75)
         a01_img_node.hide = True
 
         a01_switch_node = export_group_tree.nodes.new('CompositorNodeSwitch')
         a01_switch_node.location = (-200,75)
+        a01_switch_node.name = "A01 Switch"
         a01_switch_node.inputs[0].default_value = (0,0,0,0)
         a01_switch_node.check = True
         a01_switch_node.hide = True
 
         b02_img_node = export_group_tree.nodes.new('CompositorNodeImage')
+        b02_img_node.name = "B02"
         b02_img_node.location = (-400,25)
         b02_img_node.hide = True
 
         b02_switch_node = export_group_tree.nodes.new('CompositorNodeSwitch')
         b02_switch_node.location = (-200,25)
+        b02_switch_node.name = "B02 Switch"
         b02_switch_node.inputs[0].default_value = (0,0,0,0)
         b02_switch_node.check = True
         b02_switch_node.hide = True
 
         c03_img_node = export_group_tree.nodes.new('CompositorNodeImage')
+        c03_img_node.name = "C03"
         c03_img_node.location = (-400,-25)
         c03_img_node.hide = True
 
         c03_switch_node = export_group_tree.nodes.new('CompositorNodeSwitch')
         c03_switch_node.location = (-200,-25)
+        c03_switch_node.name = "C03 Switch"
         c03_switch_node.inputs[0].default_value = (0,0,0,0)
         c03_switch_node.check = True
         c03_switch_node.hide = True
 
         d04_img_node = export_group_tree.nodes.new('CompositorNodeImage')
+        d04_img_node.name = "D04"
         d04_img_node.location = (-400,-75)
         d04_img_node.hide = True
 
         d04_switch_node = export_group_tree.nodes.new('CompositorNodeSwitch')
         d04_switch_node.location = (-200,-75)
+        d04_switch_node.name = "D04 Switch"
         d04_switch_node.inputs[0].default_value = (0,0,0,0)
         d04_switch_node.check = True
         d04_switch_node.hide = True
@@ -516,6 +534,7 @@ class AniScannerNodeTree:
 
         binarize_switch_node = export_group_tree.nodes.new('CompositorNodeSwitch')
         binarize_switch_node.label = "Binarization Switch"
+        binarize_switch_node.name = "Binarization Switch"
         binarize_switch_node.check = False
         binarize_switch_node.location = (0,-20)
         binarize_switch_node.hide = True
@@ -526,6 +545,7 @@ class AniScannerNodeTree:
 
         paper_switch_node = export_group_tree.nodes.new('CompositorNodeSwitch')
         paper_switch_node.label = "Paper Switch"
+        paper_switch_node.name = "Paper Switch"
         paper_switch_node.inputs[0].default_value = (0,0,0,0)
         paper_switch_node.check = True
         paper_switch_node.location = (0,-70)

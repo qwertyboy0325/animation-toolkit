@@ -13,7 +13,7 @@ class PAPER_OT_generate_paper(bpy.types.Operator):
         support.GeneratePaper(context)
         support.SetAniBackground(cam)
 
-        
+        props.set_background_image(context)
 
         return {'FINISHED'}
 

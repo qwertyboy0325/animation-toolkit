@@ -58,7 +58,6 @@ def DrawPaper(context,scene_resolution):
     
     basic_margin_x = (overflow_area.px_width - paper_size.x)/2
     basic_margin_y = (overflow_area.px_height - paper_size.y)/2
-    print(overflow_verts_pos[0][0])
 
     basic_verts_pos =   [
         (overflow_verts_pos[0][0] + basic_margin_x, overflow_verts_pos[0][1] + basic_margin_y),
@@ -108,7 +107,6 @@ def DrawArea(name,verts_pos,scene_resolution,col=(0,0,255,255)):
 
 def DrawCenter(center_vert_pos,scene_resolution,col=(0,0,255,255)):
     path = os.path.abspath(str(bpy.app.binary_path)+"/../anitools")
-    print(path)
     filepath = path + "/D04_cnt.png"
 
     if not os.path.isdir(path):
