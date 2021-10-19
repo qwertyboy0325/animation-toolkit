@@ -58,7 +58,6 @@ def DrawPaper(context,scene_resolution):
     
     basic_margin_x = (overflow_area.px_width - paper_size.x)/2
     basic_margin_y = (overflow_area.px_height - paper_size.y)/2
-    print(overflow_verts_pos[0][0])
 
     basic_verts_pos =   [
         (overflow_verts_pos[0][0] + basic_margin_x, overflow_verts_pos[0][1] + basic_margin_y),
@@ -108,7 +107,6 @@ def DrawArea(name,verts_pos,scene_resolution,col=(0,0,255,255)):
 
 def DrawCenter(center_vert_pos,scene_resolution,col=(0,0,255,255)):
     path = os.path.abspath(str(bpy.app.binary_path)+"/../anitools")
-    print(path)
     filepath = path + "/D04_cnt.png"
 
     if not os.path.isdir(path):
@@ -135,7 +133,14 @@ def SetAniBackground(cam):
     cam.data.show_background_images = True
 
     for name in names:
-        imgs.append(bpy.data.images.load(path + "\\" + name))
+        # if bpy.data.images.get(name) is not None:
+        if name in bpy.data.images:
+            bpy.data.images[name].reload()
+            bpy.data.images[name].pack()
+        else:
+            img = bpy.data.images.load(path + "\\" + name)
+            img.pack()
+        imgs.append(bpy.data.images[name])
     
     for img in imgs:
         bg = cam.data.background_images.new()

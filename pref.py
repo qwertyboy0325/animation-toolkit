@@ -85,7 +85,7 @@ class ANITOOLS_OT_install_dependencies(Operator):
 
 
 class ANITOOLS_PT_warning_panel(Panel):
-    bl_idname = "anitools.warning_panel"
+    bl_idname = "ANITOOLS_PT_warning_panel"
     bl_label = "AniTools Warning"
     bl_category = "2D Animation Toolkit"
     bl_space_type = "VIEW_3D"

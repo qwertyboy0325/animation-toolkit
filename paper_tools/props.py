@@ -7,17 +7,32 @@ def paper_size_update(self, context):
     render = context.scene.render
     render.resolution_x = paper_size.x
     render.resolution_y = paper_size.y
+    return None
 
 def multiple_to_px(self,context):
     paper_size = context.scene.anitools.paper_setting.paper_size
     overflow_area = context.scene.anitools.paper_setting.overflow_area
     overflow_area.px_width = paper_size.x * overflow_area.width
     overflow_area.px_height = paper_size.y * overflow_area.height
+    return None
 
+def update_background_image(self,context):
+    set_background_image(context)
+
+    return None
+
+def set_background_image(context):
+    if len(context.scene.camera.data.background_images)>3:
+        b02_img = context.scene.camera.data.background_images[2]
+        b02_enable = context.scene.anitools.paper_setting.title_safe.enable
+        b02_img.alpha = 1 if b02_enable is True else 0
+        c03_img = context.scene.camera.data.background_images[0]
+        c03_enable = context.scene.anitools.paper_setting.overflow_area.enable
+        c03_img.alpha = 1 if c03_enable is True else 0
 
 class OptionalProps:
-    enable : bpy.props.BoolProperty(name="Enable",default=True)
-    renderable : bpy.props.BoolProperty(name="Renderable",default=True)
+    enable : bpy.props.BoolProperty(name="Enable",default=True,update=update_background_image)
+    renderable : bpy.props.BoolProperty(name="Renderable",default=True,update = update_background_image)
 
 class PaperSizeProps(bpy.types.PropertyGroup):
     x : bpy.props.IntProperty(name="Width",min=0,max=8192,soft_max=4096, subtype='PIXEL'
@@ -33,13 +48,13 @@ class TitleSafeAreaProps(OptionalProps,bpy.types.PropertyGroup):
     right : bpy.props.IntProperty(name="Right",min=0,subtype='PIXEL')
 
 class OverflowAreaProps(OptionalProps,bpy.types.PropertyGroup):
-    width : bpy.props.FloatProperty(name="Width",min=1,default=1.1,update=multiple_to_px)
-    height : bpy.props.FloatProperty(name="Height",min=1,default=1.1,update=multiple_to_px)
+    width : bpy.props.FloatProperty(name="Width",min=1,default=1.,update=multiple_to_px)
+    height : bpy.props.FloatProperty(name="Height",min=1,default=1.,update=multiple_to_px)
     px_width: bpy.props.IntProperty(name="Offset X",min=0,default=2112,subtype='PIXEL')
     px_height: bpy.props.IntProperty(name="Offset Y",min=0,default=1188,subtype='PIXEL')
 
-    pixel_offset_x: bpy.props.FloatProperty(name="pixel_offset_x")
-    pixel_offset_y: bpy.props.FloatProperty(name="pixel_offset_y")
+    # pixel_offset_x: bpy.props.FloatProperty(name="pixel_offset_x")
+    # pixel_offset_y: bpy.props.FloatProperty(name="pixel_offset_y")
 
 class BlankSpaceProps(bpy.types.PropertyGroup):
     top : bpy.props.IntProperty(name="Top",min=0,subtype='PIXEL',default=54)

@@ -10,25 +10,24 @@ bl_info = {
 }
 
 import bpy
-from . import preference
+from . import pref
 from .classes import classes,AniToolsScene
 
 
 def register():
-    preference.preference_register()
+    pref.preference_register()
     
-    if preference.import_dependencies_and_check():
+    if pref.import_dependencies_and_check():
         for cls in classes:
             bpy.utils.register_class(cls)
         bpy.types.Scene.anitools = bpy.props.PointerProperty(type=AniToolsScene)
 
 def unregister():
-    preference.preference_unregister()
-
-    if preference.is_dependencies_installed:
+    pref.preference_unregister()
+    if pref.is_dependencies_installed:
         for cls in classes:
             bpy.utils.unregister_class(cls)
         del bpy.types.Scene.anitools
 
-if __name__ == "__main__":
+if __name__ == "__main__" :
     register()
