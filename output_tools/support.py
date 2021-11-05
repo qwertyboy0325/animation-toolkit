@@ -85,3 +85,19 @@ def setPaperSwitch(switch,context):
     switch.check = enable
 
     return
+
+def file_rename(name,num,replace_ch = '#'):
+    end = name.rfind(replace_ch)
+    start = 0
+    for i in range(end-1,0,-1):
+        if name[i] is not replace_ch:
+            start = i + 1
+            break
+
+    count = (end - start) + 1
+    out_num = str(num).zfill(count)
+    new_name = str()
+
+    for i in range(start,end+1):
+        new_name = name[:start] + out_num + name[end+1:]
+    return new_name

@@ -1,5 +1,8 @@
+from typing import Text
 import bpy
+from bpy import props
 from bpy.types import Panel,Operator
+from .props import AniOutputProps
 
 
 def draw_threshold(layout,binirization,label,prop_name):
@@ -20,19 +23,13 @@ class ANITOOLS_PT_output:
         column.label(text = "Render:")
         row = column.row(align=True)
 
-        ############################################################################################## TODO: Overwrite it by custom operator
-        op = row.operator("anitools.output",text = "Image",icon = "RENDER_STILL")
-        # op.animation = False
+        render_action = context.scene.anitools.output_setting.render_action
+        if render_action == 'DEF':
+            op = row.operator("render.render",text = "Animation",icon = "RENDER_ANIMATION")
+            op.animation = True
+        else:
+            op = row.operator("anitools.output",text = "Animation",icon = "RENDER_ANIMATION")
 
-        # op = row.operator("render.render",text = "Image",icon = "RENDER_STILL")
-        # op.animation = False
-
-        # op = row.operator("render.render",text = "Animation",icon = "RENDER_ANIMATION")
-        # op.animation = True
-        ##############################################################################################
-
-        # operator()
-        # row.lable(text="")
         
 class ANITOOLS_PT_file_setting:
     bl_label = "File Setting"
@@ -142,29 +139,41 @@ class ANITOOLS_PT_basic_setting:
         layout = self.layout
 
         scene = context.scene
+        
+        row = layout.row()
 
-        column = layout.column(align=False)
-        subrow = column.row()
+        ani_output = context.scene.anitools.output_setting
+        render_action = ani_output.render_action
+
+        column = row.column()
+        column.label(text="Render Type")
+        column.prop(ani_output, 'render_action', icon_only=False, emboss=True, text='')
+        column.separator(factor = 2)
+
+
+        column1 = layout.column(align=False)
+        subrow = column1.row()
         subrow.scale_x = 0.5
         subrow.label(text="Frame Start")
         subrow.scale_x = 0.5
         subrow.prop(scene, 'frame_start', text = "")
 
-        column.separator()
+        column1.separator()
 
-        subrow = column.row()
+        subrow = column1.row()
         subrow.scale_x = 0.5
         subrow.label(text="Frame End")
         subrow.scale_x = 0.5
         subrow.prop(scene, 'frame_end', text = "")
 
-        column.separator()
+        column1.separator()
 
-        subrow = column.row()
+        subrow = column1.row()
         subrow.scale_x = 0.5
         subrow.label(text="Step")
         subrow.scale_x = 0.5
         subrow.prop(scene, 'frame_step', text = "")
+        column1.enabled = True if render_action == 'DEF' else False
 
 class ANITOOLS_PT_output_3d(ANITOOLS_PT_output,Panel):
     bl_idname = "ANITOOLS_PT_output_3d"

@@ -144,5 +144,6 @@ def SetAniBackground(cam):
     
     for img in imgs:
         bg = cam.data.background_images.new()
+        bg.display_depth = 'FRONT'
         bg.image = img
         bg.alpha = 1
