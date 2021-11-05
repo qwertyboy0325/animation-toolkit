@@ -426,7 +426,7 @@ class BinarizationNodeTree:
         link(alph_over_node_2.outputs[0],alph_over_node_3.inputs[2])
 
         link(alph_over_node_3.outputs[0],group_out.inputs[0])
-        
+
 class PaperOutputNodeTree:
     def new():
         if 'PaperOutputNodeTree' in bpy.data.node_groups:
