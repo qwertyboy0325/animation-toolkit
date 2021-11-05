@@ -41,6 +41,18 @@ class ScannerSettingProps(bpy.types.PropertyGroup):
 class AniOutputProps(bpy.types.PropertyGroup):
     file_setting: bpy.props.PointerProperty(type = FileSettingProps)
     scanner_setting: bpy.props.PointerProperty(type = ScannerSettingProps)
+    render_action : bpy.props.EnumProperty(
+        name = "Render Type",
+        description = "Render Type",
+        default = "DEF",
+        items=(
+            ("DEF","Default","Render Keyframe by Blender Default.",1),
+            ("OBJ","Keyframe of Selected Objects","Renders all keyframes assigned to any selected object.",2),
+            ("SEL","Selected Keyframe","Render all Selected Keyframe in Dope Sheet Editor.",3),
+            ("ALL","All of Keyframe","Render all keyframes.",4),
+        )
+    )
+    
 
 classes = (
     FileSettingProps,
