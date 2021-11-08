@@ -101,3 +101,90 @@ def file_rename(name,num,replace_ch = '#'):
     for i in range(start,end+1):
         new_name = name[:start] + out_num + name[end+1:]
     return new_name
+
+class KeyFrameHelper:
+    @staticmethod
+    def get_gp_objs(objects):
+        gp_objs = []
+        for object in objects:
+            if type(object.data) == bpy.types.GreasePencil:
+                gp_objs.append(object)
+        return gp_objs
+
+    @staticmethod
+    def key_frames(gps_obj,use_selected = False,use_invisible_layer = False):
+        keys = set()
+
+        for gp_obj in gps_obj:
+            gp = bpy.types.GreasePencil
+            if gp_obj.hide_render == False:
+                gp = gp_obj.data
+            else:
+                continue
+            for layer in gp.layers:
+                if use_invisible_layer is False and layer.hide is True:     #Skip Invisible Layer
+                    continue
+                for frame in layer.frames:
+                    if use_selected is True and frame.select is False:
+                        continue
+                    keys.add(frame.frame_number)
+
+        return keys
+
+    @staticmethod
+    def key_selected_objects(context)->set:
+        objects = context.selected_objects
+        gps_obj = KeyFrameHelper.get_gp_objs(objects)
+
+        keys = KeyFrameHelper.key_frames(gps_obj,use_selected=False)
+        keys.discard(0)
+
+        return keys
+
+    @staticmethod
+    def keys_selected_frames(context)->set:
+        objects = context.scene.objects
+        gps_obj = KeyFrameHelper.get_gp_objs(objects)
+
+        return KeyFrameHelper.key_frames(gps_obj,use_selected=True)
+    
+    @staticmethod
+    def keys_all(context)->set:
+        objects = context.scene.objects
+        gps_obj = KeyFrameHelper.get_gp_objs(objects)
+
+        keys = KeyFrameHelper.key_frames(gps_obj,use_selected=False)
+        keys.discard(0)
+
+        return keys
+    
+    @staticmethod
+    def keys_selected(context)->bool:
+        objects = context.scene.objects
+        gps_obj = context.gpencil
+        # gps_obj = KeyFrameHelper.get_gp_objs(objects)
+
+        return KeyFrameHelper.gp_obj_selected(gps_obj,use_selected=True,use_invisible_layer=True)
+    
+    @staticmethod
+    def objs_selected(context)->bool:
+        objects = context.selected_objects
+        gps_obj = KeyFrameHelper.get_gp_objs(objects)
+
+        return KeyFrameHelper.gp_obj_selected(gps_obj)
+
+    @staticmethod
+    def gp_obj_selected(gps_obj,use_selected = False,use_invisible_layer = False)->bool:
+        for gp_obj in gps_obj:
+            gp = bpy.types.GreasePencil
+            if gp_obj.hide_render == True:                                  #Skip Invisible Object
+                continue
+            gp = gp_obj.data                                                #Unpack Object to GP Object
+            for layer in gp.layers:
+                if use_invisible_layer is False and layer.hide is True:     #Skip Invisible Layer
+                    continue
+                for frame in layer.frames:
+                    if use_selected is True and frame.select is False:
+                        continue
+                    return True
+        return False

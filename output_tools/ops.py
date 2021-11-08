@@ -2,6 +2,7 @@ from os import name, path
 import bpy
 from bpy.props import BoolProperty
 from . import support
+from .support import KeyFrameHelper
 from .props import AniOutputProps
 from ..utils import nodes
 import math
@@ -10,63 +11,64 @@ class OUTPUT_OT_output(bpy.types.Operator):
     bl_idname = "anitools.output"
     bl_label = "Render"
 
-    def get_gp_objs(self,objects):
-        gp_objs = []
-        for object in objects:
-            if type(object.data) == bpy.types.GreasePencil:
-                gp_objs.append(object)
-        return gp_objs
+    _timer = None
+    frame_nums = set()
+    cur_frame_idx = 0
+    lst_frame_idx = 0
+    stop = None
+    rendering = None
+    rendered_frames = []
 
-    def key_frames(self,gps_obj,use_selected = False):
-        keys = set()
+    def pre(self, scene,context = None):
+        self.rendering = True
 
-        for gp_obj in gps_obj:
-            gp = bpy.types.GreasePencil
-            if gp_obj.hide_render == False:
-                gp = gp_obj.data
-            else:
-                continue
-            for layer in gp.layers:
-                for frame in layer.frames:
-                    if use_selected is True:
-                        if frame.select is True:
-                            keys.add(frame.frame_number)
-                    else:
-                        keys.add(frame.frame_number)
+    def post(self, scene,context = None):
+        self.rendering = False
+        self.cur_frame_idx += 1
+        frame_num = self.frame_nums[self.cur_frame_idx]
+        self.rendered_frames.append(frame_num)
+        print(self.cur_frame_idx)
 
-        return keys
+    def cancelled(self,scene,context = None):
+        self.stop = True
 
-    def key_selected_objects(self,context)->int:
-        objects = context.selected_objects
-        gps_obj = self.get_gp_objs(objects)
+    def add_handlers(self,context):
+        bpy.app.handlers.render_pre.append(self.pre)
+        bpy.app.handlers.render_post.append(self.post)
+        bpy.app.handlers.render_cancel.append(self.cancelled)
 
-        keys = self.key_frames(gps_obj,use_selected=False)
-        keys.discard(0)
+        self._timer = context.window_manager.event_timer_add(0.1, window=context.window)
+        context.window_manager.modal_handler_add(self)
 
-        return keys
+    def remove_handlers(self,context):
+        bpy.app.handlers.render_pre.remove(self.pre)
+        bpy.app.handlers.render_post.remove(self.post)
+        bpy.app.handlers.render_cancel.remove(self.cancelled)
 
-    def keys_selected_frames(self,context)->int:
-        objects = context.scene.objects
-        gps_obj = self.get_gp_objs(objects)
+        context.window_manager.event_timer_remove(self._timer)
 
-        return self.key_frames(gps_obj,use_selected=True)
-    
-    def keys_all(self,context)->int:
-        objects = context.scene.objects
-        gps_obj = self.get_gp_objs(objects)
+    @classmethod
+    def poll(cls,context):
+        render_action = context.scene.anitools.output_setting.render_action
+        if render_action == 'OBJ':
+            return KeyFrameHelper.objs_selected(context) is True
+        # elif render_action == 'SEL':
+        #     return KeyFrameHelper.keys_selected(context) is True
+        elif render_action == 'ALL':
+            return KeyFrameHelper.keys_all(context) != set()
+        return True
 
-        keys = self.key_frames(gps_obj,use_selected=False)
-        keys.discard(0)
-
-        return keys
 
     def execute(self,context):
+        self.stop = False
+        self.rendering = False
+        self.add_handlers(context)
+
         scene = context.scene
-        output_path = scene.render.filepath
-        if context.scene.use_nodes is False :
-            context.scene.use_nodes = True
+        if scene.use_nodes is False :
+            scene.use_nodes = True
         
-        compositor = context.scene.node_tree
+        compositor = scene.node_tree
         
         # Generate Nodes if Nodes not prepared
         generateNodes(compositor)
@@ -74,41 +76,51 @@ class OUTPUT_OT_output(bpy.types.Operator):
         # Set Nodes Properties Value
         support.setNodesProps(compositor,context)
 
-        render_action = context.scene.anitools.output_setting.render_action
-
-        if render_action == 'DEF':
-            return {'CANCLED'}
+        render_action = scene.anitools.output_setting.render_action
 
         switch = {
-            'OBJ' : self.key_selected_objects,
-            'SEL' : self.keys_selected_frames,
-            'ALL' : self.keys_all,
+            'OBJ' : KeyFrameHelper.key_selected_objects,
+            'SEL' : KeyFrameHelper.keys_selected_frames,
+            'ALL' : KeyFrameHelper.keys_all,
         }
 
         keys = switch.get(render_action)(context)
+        self.frame_nums = sorted(list(keys))
+        self.lst_frame_idx = len(self.frame_nums) -1
 
-        frame_numbers = sorted(list(keys))
-        print(frame_numbers)
-        rendered_frames = []
+        bpy.ops.render.view_show('INVOKE_DEFAULT')
 
-        for frame_num in frame_numbers:
-            path_frame = scene.render.frame_path(frame = frame_num)
-            scene.frame_set(frame_num)
-            scene.render.filepath = path_frame
-            bpy.ops.render.render(write_still=True)
-            scene.render.filepath = output_path
-            rendered_frames.append(frame_num)
-
-        if rendered_frames:
-            folder = path.dirname(scene.render.frame_path(frame=0))
-            info = "Rendered: {}".format(", ".join(map(str, rendered_frames)))
-            self.report({'INFO'}, info)
-
-        return {'FINISHED'}
+        return {"RUNNING_MODAL"}
 
     def modal(self, context, event):
-        
-        return
+        if event.type == 'ESC':
+            self.remove_handlers(context)
+            return {"CANCELLED"}
+
+        if event.type == 'TIMER':
+            if self.stop:
+                self.remove_handlers(context)
+                return {"CANCELLED"}
+
+            if self.cur_frame_idx > self.lst_frame_idx:
+                self.remove_handlers(context)
+                if self.rendered_frames:
+                    info = "Rendered: {}".format(", ".join(map(str, self.rendered_frames)))
+                    self.report({'INFO'}, info)
+                    return {"FINISHED"}
+
+            if self.rendering is False:
+                scene = context.scene
+                output_path = scene.render.filepath
+                frame_num = self.frame_nums[self.cur_frame_idx]
+                path_frame = scene.render.frame_path(frame = frame_num)
+                print(path_frame)
+                scene.frame_set(frame_num)
+                scene.render.filepath = path_frame
+                bpy.ops.render.render(write_still=True)
+                scene.render.filepath = output_path
+
+        return {"PASS_THROUGH"}
 
 def generateNodes(parent):
         render_layers = parent.nodes['Render Layers'] if 'Render Layers' in parent.nodes else generateRLayers(parent)
@@ -137,5 +149,4 @@ def generateScanner(parent):
 
 classes = (
     OUTPUT_OT_output,
-    # OUTPUT_OT_output_type,
 )
