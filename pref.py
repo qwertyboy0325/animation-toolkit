@@ -143,3 +143,6 @@ def import_dependencies_and_check():
     else:
         is_dependencies_installed = True
         return True
+
+def get_rootpath():
+    return os.getcwd()
