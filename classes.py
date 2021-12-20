@@ -1,4 +1,4 @@
-from . import paper_tools,output_tools
+from . import paper_tools,output_tools,preset_tools
 import bpy
 from bpy.types import PropertyGroup
 
@@ -9,4 +9,5 @@ class AniToolsScene(PropertyGroup):
 classes = \
     paper_tools.classes + \
     output_tools.classes + \
+    preset_tools.classes + \
     (AniToolsScene,)

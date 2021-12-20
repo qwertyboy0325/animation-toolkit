@@ -1,12 +1,13 @@
 import bpy
+from bpy.types import Panel
 
-class ANITOOLS_PT:
+class ANITOOLS_PT_paper:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = '2D Animation Toolkit'
+    bl_category = 'Paper Tools'
     # bl_options = {'DEFAULT_CLOSED'}
 
-class ANITOOLS_PT_paper_panel(ANITOOLS_PT,bpy.types.Panel):
+class ANITOOLS_PT_paper_panel(ANITOOLS_PT_paper,Panel):
     bl_idname = "ANITOOLS_PT_paper_panel"
     bl_label = "Papper Setting"
 
@@ -16,7 +17,7 @@ class ANITOOLS_PT_paper_panel(ANITOOLS_PT,bpy.types.Panel):
         layout.operator("anitools.generate_paper", text='Generate')
 
 
-class ANITOOLS_PT_paper_size(ANITOOLS_PT,bpy.types.Panel):
+class ANITOOLS_PT_paper_size(ANITOOLS_PT_paper,Panel):
     bl_idname = "ANITOOLS_PT_paper_size"
     bl_label = "Papper Size"
     bl_parent_id = "ANITOOLS_PT_paper_panel"
@@ -35,7 +36,7 @@ class ANITOOLS_PT_paper_size(ANITOOLS_PT,bpy.types.Panel):
         column.prop(paper_size , 'dpi')
 
 
-class ANITOOLS_PT_title_safe_area(ANITOOLS_PT,bpy.types.Panel):
+class ANITOOLS_PT_title_safe_area(ANITOOLS_PT_paper,Panel):
     bl_idname = "ANITOOLS_PT_title_safe_area"
     bl_label = "Title Safe Area"
     bl_parent_id = "ANITOOLS_PT_paper_panel"
@@ -64,7 +65,7 @@ class ANITOOLS_PT_title_safe_area(ANITOOLS_PT,bpy.types.Panel):
         column.prop(title_safe, 'renderable')
 
 
-class ANITOOLS_PT_overflow_area(ANITOOLS_PT,bpy.types.Panel):
+class ANITOOLS_PT_overflow_area(ANITOOLS_PT_paper,Panel):
     bl_idname = "ANITOOLS_PT_overflow_area"
     bl_label = "Overflow Area"
     bl_parent_id = "ANITOOLS_PT_paper_panel"
@@ -91,7 +92,7 @@ class ANITOOLS_PT_overflow_area(ANITOOLS_PT,bpy.types.Panel):
         column.prop(overflow_area, 'renderable')
 
 
-class ANITOOLS_PT_blank_space(ANITOOLS_PT,bpy.types.Panel):
+class ANITOOLS_PT_blank_space(ANITOOLS_PT_paper,Panel):
     bl_idname = "ANITOOLS_PT_blank_space"
     bl_label = "Blank Space"
     bl_parent_id = "ANITOOLS_PT_paper_panel"

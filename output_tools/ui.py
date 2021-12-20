@@ -1,8 +1,5 @@
-from typing import Text
 import bpy
-from bpy import props
-from bpy.types import Panel,Operator
-from .props import AniOutputProps
+from bpy.types import Panel
 
 
 def draw_threshold(layout,binirization,label,prop_name):
@@ -14,7 +11,7 @@ def draw_threshold(layout,binirization,label,prop_name):
 
 class ANITOOLS_PT_output:
     bl_label = "Output Setting"
-    bl_category = '2D Animation Toolkit'
+    bl_category = 'Output Tools'
     bl_region_type = "UI"
 
     def draw(self,context):
