@@ -30,7 +30,7 @@ AniTools是一種可以簡化了Blender介面的輔助程式，通過簡單介�
 
 ### 手動安裝
 1. 以系統管理員身分打開Blender
-2. 點選**Scripting**的工作區並在**command line**(預設於左邊的中間高度)輸入以下程式
+2. 點選**Scripting**的工作區並在**command line**(預設於左邊的中間高度)輸入以下程式:
 ```python
 import sys
 sys.exec_prefix
@@ -42,3 +42,23 @@ cd (剛剛複製的位址)/bin
 python -m ensurepip
 python -m pip install pillow
 ```
+
+## 功能
+### Paper Tools
+Paper Tools 能夠生成並渲染動畫用的紙張，並套用至攝影機背景以方便構圖，支援使用安全區及留白等畫框。
+主要有以下參數可調整:
+1. Paper Size:
+ + 同 Clip Studio 中的基準尺寸。能夠調整紙張的基本尺寸。
+2. Title Safe Area:
+ + 同 Clip Studio 中的演出畫格。為 Paper Size 的向內延伸。
+ + 可單獨關閉此區域是否顯示或渲染
+3. Overflow Area:
+ + 同 Clip Studio 中的作畫尺寸。
+ + 可單獨關閉此區域是否顯示或渲染
+4. Blank Space:
+ + 同 Clip Studio 中的餘白
+ + 可單獨關閉此區域是否顯示或渲染
+
++ 設定完成後必須按下Generate以更新畫紙
+### Output Tools
+### AniTools Preset
