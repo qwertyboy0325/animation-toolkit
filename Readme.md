@@ -69,7 +69,7 @@ python -m pip install pillow
 Basic setting 能夠設定如何選擇關鍵禎並加以渲染的方式。
 主要有以下參數可調整:
 1. Render Type
- 1. Default: 照Blender 預設的方式渲染(選定起始禎和結束禎，並設定間隔)。
+ 1. Default: 照Blender 預設的方式渲染 (選定起始禎和結束禎，並設定間隔)。
  2. Keyframe of Selected Objects: 將所選取物件中所建立的關鍵禎都進行渲染。
  3. Selected Keyframe: 將在Dope Sheet 中所選取的所有關鍵禎都進行渲染。
  4. All of Keyframe: 將所有關鍵禎進行渲染。
@@ -78,5 +78,21 @@ Basic setting 能夠設定如何選擇關鍵禎並加以渲染的方式。
 3. Step: 間隔，只有在Render Type 為Default 時有效。
 
 #### File Setting
+File Setting 能夠設定輸出序列的位置、命名方式、檔案格式及色彩深度。
+1. Output Path: 指定序列的輸出位置。
+2. Name: 指定序列命名方式，用#可代表序列數字應該擺放的位置。`ex: 命名為abc###時，序列為abc001,abc002,abc003...以此類推`
+3. Color Depth: 設定色彩深度(此功能有些Bug, 如需詳細調整請使用Blender所提供的方式)
+4. Format: 設定檔案檔案格式。
+
+#### Scanner Setting
+Scanner Setting 能夠設定渲染設定，如:紙張渲染、二值化
+1. Render Paper: 可以選擇是否渲染紙張
+2. Binirization: 可以選擇是否進行二值化
+ + 使用時請確保渲染出來時背景為全白。
+ + 可依照顏色進行二值化的閥值控制。
 ### AniTools Preset
+#### Workspace
+套用AniTools中所附設的工作區域預設。
+#### Human
+連結(Link)人物模型並將之Library Override。
 
